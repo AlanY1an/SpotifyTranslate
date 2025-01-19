@@ -45,7 +45,7 @@ var options = {
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
-    offscreen: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.jsx'),
+    offscreen: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.js'),
   },
   chromeExtensionBoilerplate: {
     notHotReload: ['background', 'contentScript', 'devtools', 'offscreen'],

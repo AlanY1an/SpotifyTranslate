@@ -1,28 +1,7 @@
-import { extractLyricsByURL, handleExtractLyricsMessages } from "./lyricsExtractor";
+import { ensureOffscreenDocument } from "./offscreenHelper";
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
-
-handleExtractLyricsMessages()
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Received message:', message);
-  if (message.type === 'EXTRACT_LYRICS') {
-
-    // process the url data
-    extractLyricsByURL(message.url)
-      .then((lyrics) => {
-        sendResponse({ success: true, lyrics });
-      })
-      .catch((error) => {
-        console.error('Error extracting lyrics:', error);
-        sendResponse({ success: false, error: error.message });
-      });
-
-    // send response
-    sendResponse({ success: true });
-  }
-});
 
 
 const GENIUS_API_URL = 'https://api.genius.com/search';
@@ -31,7 +10,18 @@ const GENIUS_API_TOKEN =
 
 console.log('Background script is running');
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.type === "EXTRACT_LYRICS") {
+    await ensureOffscreenDocument();
+    chrome.runtime.sendMessage(
+      { type: "EXTRACT_LYRICS", url: message.url },
+      response => {
+        sendResponse(response);
+      }
+    );
+    return true; // Keep the message channel open
+  }
+
   if (message.type === 'FETCH_LYRICS') {
     const { trackName, artistName } = message;
 

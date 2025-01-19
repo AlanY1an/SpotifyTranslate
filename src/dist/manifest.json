@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Spotify Lyrics Translator",
+  "version": "1.0",
+  "description": "Translate and display Spotify lyrics on the web player.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["http://*/*", "https://*/*", "https://*.spotify.com/*"],
+  "action": {
+    "default_popup": "/pages/popup.html"
+  },
+  "icons": {
+    "32": "/icons/icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://open.spotify.com/*"],
+      "js": ["/pages/content.js"]
+    }
+  ]
+
+}

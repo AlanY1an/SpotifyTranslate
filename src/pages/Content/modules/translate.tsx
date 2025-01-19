@@ -1,6 +1,7 @@
 // 引入 mock 数据
 import { mockTranslatedLyrics } from './api/lyricsTranslatedApi';
 
+
 // Get All Lyrics
 const getAllLyrics = (): HTMLDivElement[] | null => {
   const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
@@ -52,4 +53,5 @@ const translateLyricsOnce = (): void => {
 export const init = (): void => {
   console.log('Initializing lyrics translation...');
   translateLyricsOnce();
+
 };

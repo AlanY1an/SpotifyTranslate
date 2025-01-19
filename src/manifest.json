@@ -15,7 +15,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["https://open.spotify.com/lyrics*"],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }

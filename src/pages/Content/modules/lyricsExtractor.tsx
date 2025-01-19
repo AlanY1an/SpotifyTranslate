@@ -31,5 +31,5 @@ export const extractLyricsFromURL = (url: string) => {
   console.log("lyricsExtractor: lyricsList " + lyricsList)
 
   // send lyrics data to background.js
-  chrome.runtime.sendMessage({ action: 'lyricsExtract', lyrics: lyricsList });
+  chrome.runtime.sendMessage({ action: 'EXTRACT_LYRICS', lyrics: lyricsList });
 };

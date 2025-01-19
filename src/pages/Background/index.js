@@ -3,7 +3,7 @@ console.log('Put the background scripts here.');
 
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'lyricsExtract') {
+  if (message.action === 'EXTRACT_LYRICS') {
     console.log('Received lyrics from content script:', message.lyrics);
 
     // process the lyrics data here

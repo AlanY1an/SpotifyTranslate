@@ -1,6 +1,9 @@
-// 引入 mock 数据
-import { mockTranslatedLyrics } from './api/lyricsTranslatedApi';
+import { mockTranslatedLyrics } from '../../Background/api/lyricsTranslatedApi';
 
+// Get Song Name and Author/Team Name
+const getSongInfo = (): string[] => {
+  return [mockTranslatedLyrics.meta.title, mockTranslatedLyrics.meta.artist];
+};
 
 // Get All Lyrics
 const getAllLyrics = (): HTMLDivElement[] | null => {
@@ -14,44 +17,51 @@ const getAllLyrics = (): HTMLDivElement[] | null => {
   return Array.from(lyricElements);
 };
 
-// Insert TranslatedLyrics
+// Insert TranslatedLyrics to the spotify web page
 const insertTranslatedLyrics = (): void => {
   const lyricsLines = getAllLyrics();
-  lyricsLines?.forEach((line, index) => {
-    if (line.querySelector('.translated-line')) return;
+  let translationIndex = 0;
 
-    // Create translated lyrics
+  lyricsLines?.forEach((line) => {
+    if (line.querySelector('.translated-line')) return;
+    if (line.textContent?.trim() === '') return;
+
+    // Create translated lyrics element
     const translatedElement = document.createElement('div');
     translatedElement.textContent =
-      mockTranslatedLyrics[index] || '[Translation not available]';
+      mockTranslatedLyrics.lyrics[translationIndex] ||
+      '[Translation not available]';
     translatedElement.className = 'translated-line';
 
     line.appendChild(translatedElement);
+
+    translationIndex++;
   });
   console.log('Mock translations inserted successfully.');
 };
 
-// Await all the lyri and translate
-const translateLyricsOnce = (): void => {
-  const maxAttempts = 10;
-  let attempts = 0;
-  const tryTranslate = () => {
-    const lyricsLines = getAllLyrics();
-    if (lyricsLines) {
-      insertTranslatedLyrics();
-    } else if (attempts < maxAttempts) {
-      attempts++;
-      console.log(`Lyrics not found, retrying... (${attempts}/${maxAttempts})`);
-      setTimeout(tryTranslate, 500); // try every 500ms 这里类似于循环
-    } else {
-      console.log('Failed to find lyrics after maximum retries.');
-    }
-  };
-  tryTranslate();
+// Monitor for lyrics loading
+let debounceTimeout: NodeJS.Timeout | null = null;
+const observeLyrics = (): void => {
+  const targetNode = document.body;
+  const config = { childList: true, subtree: true };
+
+  const observer = new MutationObserver(() => {
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      const lyricsLines = getAllLyrics();
+      if (lyricsLines && lyricsLines.length > 0) {
+        insertTranslatedLyrics();
+      } else {
+        console.warn('Lyrics not found during DOM mutation.');
+      }
+    }, 300); // debounce time
+  });
+  observer.observe(targetNode, config);
+  console.log('Started observing lyrics.');
 };
 
-export const init = (): void => {
+export const showLyricsTranslated = (): void => {
   console.log('Initializing lyrics translation...');
-  translateLyricsOnce();
-
+  observeLyrics();
 };

@@ -4,6 +4,7 @@
   "version": "1.0",
   "description": "Translate and display Spotify lyrics on the web player.",
   "options_page": "options.html",
+  "permissons:":["offscreen"],
   "background": { "service_worker": "background.bundle.js" },
   "action": {
     "default_popup": "popup.html",

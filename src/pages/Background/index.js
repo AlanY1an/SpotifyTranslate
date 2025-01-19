@@ -1,13 +1,23 @@
+import { extractLyricsByURL, handleExtractLyricsMessages } from "./lyricsExtractor";
+
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
 
+handleExtractLyricsMessages()
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'EXTRACT_LYRICS') {
-    console.log('Received lyrics from content script:', message.lyrics);
+  console.log('Received message:', message);
+  if (message.type === 'EXTRACT_LYRICS') {
 
-    // process the lyrics data here
-
+    // process the url data
+    extractLyricsByURL(message.url)
+      .then((lyrics) => {
+        sendResponse({ success: true, lyrics });
+      })
+      .catch((error) => {
+        console.error('Error extracting lyrics:', error);
+        sendResponse({ success: false, error: error.message });
+      });
 
     // send response
     sendResponse({ success: true });

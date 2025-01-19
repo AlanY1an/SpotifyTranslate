@@ -52,6 +52,7 @@ const observeLyrics = (): void => {
       const lyricsLines = getAllLyrics();
       if (lyricsLines && lyricsLines.length > 0) {
         insertTranslatedLyrics();
+        observer.disconnect();
       } else {
         console.warn('Lyrics not found during DOM mutation.');
       }

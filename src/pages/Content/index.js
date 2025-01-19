@@ -9,3 +9,4 @@ showLyricsTranslated();
 
 const testLyricsURL = "https://genius.com/Genius-brasil-traducoes-ed-sheeran-shape-of-you-traducao-em-portugues-lyrics"
 extractLyricsFromURL(testLyricsURL)
+

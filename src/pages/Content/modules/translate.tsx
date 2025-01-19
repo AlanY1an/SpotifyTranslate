@@ -1,10 +1,9 @@
 import { mockTranslatedLyrics } from '../../Background/api/lyricsTranslatedApi';
 
 // Get Song Name and Author/Team Name
-const getSongInfo = () : string[] => {
+const getSongInfo = (): string[] => {
   return [mockTranslatedLyrics.meta.title, mockTranslatedLyrics.meta.artist];
-}
-
+};
 
 // Get All Lyrics
 const getAllLyrics = (): HTMLDivElement[] | null => {
@@ -30,7 +29,8 @@ const insertTranslatedLyrics = (): void => {
     // Create translated lyrics element
     const translatedElement = document.createElement('div');
     translatedElement.textContent =
-      mockTranslatedLyrics.lyrics[translationIndex] || '[Translation not available]';
+      mockTranslatedLyrics.lyrics[translationIndex] ||
+      '[Translation not available]';
     translatedElement.className = 'translated-line';
 
     line.appendChild(translatedElement);
@@ -61,8 +61,7 @@ const observeLyrics = (): void => {
   console.log('Started observing lyrics.');
 };
 
-
 export const showLyricsTranslated = (): void => {
-    console.log('Initializing lyrics translation...');
-    observeLyrics();
+  console.log('Initializing lyrics translation...');
+  observeLyrics();
 };

@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from '../../assets/img/logo.svg';
-import Greetings from '../../containers/Greetings/Greetings';
+import React, { useState } from 'react';
 import './Popup.css';
 
 const Popup = () => {
+  const [lyricsUrl, setLyricsUrl] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const fetchLyrics = () => {
+    setLoading(true);
+    setError('');
+    setLyricsUrl('');
+
+    chrome.runtime.sendMessage(
+      {
+        type: 'FETCH_LYRICS',
+        trackName: 'Shape of You',
+        artistName: 'Ed Sheeran',
+      },
+      (response) => {
+        setLoading(false);
+
+        if (chrome.runtime.lastError) {
+          setError(`Error: ${chrome.runtime.lastError.message}`);
+        } else if (response?.lyrics) {
+          setLyricsUrl(response.lyrics); // 显示真实歌词 URL
+        } else {
+          setError(response.error || 'No lyrics found.');
+        }
+      }
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className="popup-container">
+      <h1>Lyrics Fetcher</h1>
+      <button onClick={fetchLyrics} disabled={loading}>
+        {loading ? 'Fetching...' : 'Fetch Lyrics'}
+      </button>
+      {lyricsUrl && (
         <p>
-          Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
+          Lyrics URL:{' '}
+          <a href={lyricsUrl} target="_blank" rel="noopener noreferrer">
+            {lyricsUrl}
+          </a>
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!!!!!!
-        </a>
-      </header>
+      )}
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };

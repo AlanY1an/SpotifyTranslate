@@ -74,7 +74,7 @@ function withOffscreenDocument(operation) {
  * 4. handle the response or error
  * 5. close the offscreen document
  */
-export function ensureOffscreenDocument(message, sendResponse) {
+export function extractLyricsFromURL(message, sendResponse) {
   // use withOffscreenDocument to wrap the entire operation process
   withOffscreenDocument(() =>
     // get the lyrics page content
@@ -83,7 +83,7 @@ export function ensureOffscreenDocument(message, sendResponse) {
       // send the content to the offscreen document for parsing
       .then(html =>
         chrome.runtime.sendMessage({
-          type: "PARSE_LYRICS",
+          type: "EXTRACT_LYRICS",
           html: html
         })
       )

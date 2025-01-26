@@ -15,10 +15,7 @@
   ],
   "description": "Translate and display Spotify lyrics on the web player.",
   "options_page": "options.html",
-  "background": {
-    "service_worker": "background.bundle.js",
-    "type": "module"
-  },
+  "background": { "service_worker": "background.bundle.js" },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"

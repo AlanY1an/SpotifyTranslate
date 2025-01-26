@@ -10,60 +10,79 @@ const GENIUS_API_TOKEN =
 
 console.log('Background script is running');
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+// 处理消息的主函数
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Background received message:', message);
 
-  if (message.type === "EXTRACT_LYRICS") {
-    await ensureOffscreenDocument();
-    chrome.runtime.sendMessage(
-      { type: "EXTRACT_LYRICS", url: message.url },
-      response => {
-        sendResponse(response);
-      }
-    );
-    return true; // Keep the message channel open
-  }
+  // 由于 chrome.runtime.onMessage 不支持直接使用 async 函数
+  // 我们需要返回 true 来表示会异步发送响应
+  handleMessage(message, sendResponse).catch((error) => {
+    console.error('Error handling message:', error);
+    sendResponse({ error: error.message });
+  });
 
-  if (message.type === 'FETCH_SONG_INFO') {
+  return true;
+});
+
+// 主消息处理函数
+async function handleMessage(message, sendResponse) {
+  switch (message.type) {
+
+    case 'EXTRACT_LYRICS':
+      await ensureOffscreenDocument(message, sendResponse);
+      break;
+
+    case 'FETCH_SONG_INFO':
+      await handleFetchSongInfo(message, sendResponse);
+      break;
+
+    case 'FETCH_LYRICS_PAGE':
+      await handleFetchLyricsPage(message, sendResponse);
+      break;
+
+    default:
+      sendResponse({ error: 'Unknown message type' });
+  }
+}
+
+// 处理获取歌曲信息的请求
+async function handleFetchSongInfo(message, sendResponse) {
+  try {
     console.log('Fetching song info for:', message);
     const { trackName, artistName } = message;
 
-    fetchGeniusLyricsUrl(trackName, artistName)
-      .then((lyricsUrl) => {
-        console.log('Found lyrics URL:', lyricsUrl);
-        sendResponse({ lyrics: lyricsUrl });
-      })
-      .catch((error) => {
-        console.error('Error fetching lyrics URL:', error);
-        sendResponse({
-          lyrics: null,
-          error: 'Lyrics URL not found or API error.',
-        });
-      });
+    const lyricsUrl = await fetchGeniusLyricsUrl(trackName, artistName);
+    console.log('Found lyrics URL:', lyricsUrl);
 
-    return true;
+    sendResponse({ lyrics: lyricsUrl });
+  } catch (error) {
+    console.error('Error fetching lyrics URL:', error);
+    sendResponse({
+      lyrics: null,
+      error: 'Lyrics URL not found or API error.',
+    });
   }
+}
 
-  if (message.type === 'FETCH_LYRICS_PAGE') {
+// 处理获取歌词页面的请求
+async function handleFetchLyricsPage(message, sendResponse) {
+  try {
     const { url } = message;
+    const response = await fetch(url);
 
-    fetch(url)
-      .then((response) => response.text())
-      .then((html) => {
-        // 只返回 HTML 内容，让 content script 去解析
-        sendResponse({ success: true, html });
-      })
-      .catch((error) => {
-        sendResponse({ success: false, error: error.message });
-      });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-    return true;
+    const html = await response.text();
+    sendResponse({ success: true, html });
+  } catch (error) {
+    console.error('Error fetching lyrics page:', error);
+    sendResponse({ success: false, error: error.message });
   }
+}
 
-  sendResponse({ error: 'Unknown message type' });
-});
-
-// Fetch lyrics URL from Genius API
+// 从 Genius API 获取歌词 URL
 async function fetchGeniusLyricsUrl(trackName, artistName) {
   const query = `${trackName} ${artistName}`;
   const response = await fetch(
@@ -85,7 +104,7 @@ async function fetchGeniusLyricsUrl(trackName, artistName) {
 
   if (data.response.hits.length > 0) {
     return data.response.hits[0].result.url;
-  } else {
-    throw new Error('No lyrics URL found.');
   }
+
+  throw new Error('No lyrics URL found.');
 }

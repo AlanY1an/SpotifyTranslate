@@ -5,23 +5,49 @@ const GENIUS_API_TOKEN =
 console.log('Background script is running');
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'FETCH_LYRICS') {
+  console.log('Background received message:', message);
+
+  if (message.type === 'FETCH_SONG_INFO') {
+    console.log('Fetching song info for:', message);
     const { trackName, artistName } = message;
 
-    fetchLyrics(trackName, artistName)
+    fetchGeniusLyricsUrl(trackName, artistName)
       .then((lyricsUrl) => {
-        sendResponse({ lyrics: lyricsUrl }); // 将真实的歌词 URL 返回
+        console.log('Found lyrics URL:', lyricsUrl);
+        sendResponse({ lyrics: lyricsUrl });
       })
       .catch((error) => {
-        console.error('Error fetching lyrics:', error);
-        sendResponse({ lyrics: null, error: 'Lyrics not found or API error.' });
+        console.error('Error fetching lyrics URL:', error);
+        sendResponse({
+          lyrics: null,
+          error: 'Lyrics URL not found or API error.',
+        });
       });
 
-    return true; // 告诉 Chrome 支持异步响应
+    return true;
   }
+
+  if (message.type === 'FETCH_LYRICS_PAGE') {
+    const { url } = message;
+
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        // 只返回 HTML 内容，让 content script 去解析
+        sendResponse({ success: true, html });
+      })
+      .catch((error) => {
+        sendResponse({ success: false, error: error.message });
+      });
+
+    return true;
+  }
+
+  sendResponse({ error: 'Unknown message type' });
 });
 
-async function fetchLyrics(trackName, artistName) {
+// Fetch lyrics URL from Genius API
+async function fetchGeniusLyricsUrl(trackName, artistName) {
   const query = `${trackName} ${artistName}`;
   const response = await fetch(
     `${GENIUS_API_URL}?q=${encodeURIComponent(query)}`,
@@ -43,6 +69,6 @@ async function fetchLyrics(trackName, artistName) {
   if (data.response.hits.length > 0) {
     return data.response.hits[0].result.url;
   } else {
-    throw new Error('No lyrics found.');
+    throw new Error('No lyrics URL found.');
   }
 }

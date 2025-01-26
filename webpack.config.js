@@ -42,12 +42,19 @@ var options = {
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
+    offscreen: path.join(
+      __dirname,
+      'src',
+      'pages',
+      'Offscreen',
+      'offscreen.js'
+    ),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
   chromeExtensionBoilerplate: {
-    notHotReload: ['background', 'contentScript', 'devtools'],
+    notHotReload: ['background', 'contentScript', 'devtools', 'offscreen'],
   },
   output: {
     filename: '[name].bundle.js',
@@ -197,6 +204,12 @@ var options = {
       cache: false,
     }),
     new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.html'),
+      filename: 'offscreen.html',
+      chunks: ['offscreen'],
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),
       filename: 'popup.html',
       chunks: ['popup'],
@@ -218,10 +231,11 @@ var options = {
   infrastructureLogging: {
     level: 'info',
   },
+  devtool: 'source-map',
 };
 
 if (env.NODE_ENV === 'development') {
-  options.devtool = 'cheap-module-source-map';
+  options.devtool = 'source-map';
 } else {
   options.optimization = {
     minimize: true,

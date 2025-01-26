@@ -2,9 +2,14 @@
   "manifest_version": 3,
   "name": "Spotify Lyrics Translator",
   "version": "1.0",
+  "permissions": ["storage", "activeTab", "scripting", "offscreen"],
+  "host_permissions": ["http://*/*", "https://*/*", "<all_urls>"],
   "description": "Translate and display Spotify lyrics on the web player.",
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "background": {
+    "service_worker": "background.bundle.js",
+    "type": "module"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
@@ -23,8 +28,13 @@
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
     {
-      "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
-      "matches": []
+      "resources": [
+        "content.styles.css",
+        "icon-128.png",
+        "icon-34.png",
+        "offscreen.html"
+      ],
+      "matches": ["<all_urls>"]
     }
   ]
 }

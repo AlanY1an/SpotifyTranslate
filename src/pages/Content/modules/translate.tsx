@@ -6,7 +6,7 @@ const getSongInfo = (): string[] => {
 };
 
 // Get All Lyrics
-const getAllLyrics = (): HTMLDivElement[] | null => {
+const getAllLyricsLines = (): HTMLDivElement[] | null => {
   const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
   const lyricElements =
     document.querySelectorAll<HTMLDivElement>(lyricElementSelector);
@@ -19,7 +19,7 @@ const getAllLyrics = (): HTMLDivElement[] | null => {
 
 // Insert TranslatedLyrics to the spotify web page
 const insertTranslatedLyrics = (): void => {
-  const lyricsLines = getAllLyrics();
+  const lyricsLines = getAllLyricsLines();
   let translationIndex = 0;
 
   lyricsLines?.forEach((line) => {

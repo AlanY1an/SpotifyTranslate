@@ -1,3 +1,9 @@
+import { extractLyricsFromURL } from "./offscreenHelper";
+
+console.log('This is the background page.');
+console.log('Put the background scripts here.');
+
+
 const GENIUS_API_URL = 'https://api.genius.com/search';
 const GENIUS_API_TOKEN =
   'jp7bt2-o1O_KHoAjTQthUDNB4PidEUgxt0NlL-eZ8pMyQV6J6mqN-sXIF9rItBb0';
@@ -21,6 +27,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // 主消息处理函数
 async function handleMessage(message, sendResponse) {
   switch (message.type) {
+
+    case 'EXTRACT_LYRICS':
+      await extractLyricsFromURL(message, sendResponse);
+      break;
+
     case 'FETCH_SONG_INFO':
       await handleFetchSongInfo(message, sendResponse);
       break;

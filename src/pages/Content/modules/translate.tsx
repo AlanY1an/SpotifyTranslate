@@ -6,7 +6,7 @@ const getSongInfo = (): string[] => {
 };
 
 // Get All Lyrics
-const getAllLyrics = (): HTMLDivElement[] | null => {
+const getAllLyricsLines = (): HTMLDivElement[] | null => {
   const lyricElementSelector = '[data-testid="fullscreen-lyric"]';
   const lyricElements =
     document.querySelectorAll<HTMLDivElement>(lyricElementSelector);
@@ -19,7 +19,7 @@ const getAllLyrics = (): HTMLDivElement[] | null => {
 
 // Insert TranslatedLyrics to the spotify web page
 const insertTranslatedLyrics = (): void => {
-  const lyricsLines = getAllLyrics();
+  const lyricsLines = getAllLyricsLines();
   let translationIndex = 0;
 
   lyricsLines?.forEach((line) => {
@@ -41,7 +41,7 @@ const insertTranslatedLyrics = (): void => {
 };
 
 // Monitor for lyrics loading
-let debounceTimeout: NodeJS.Timeout | null = null;
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 const observeLyrics = (): void => {
   const targetNode = document.body;
   const config = { childList: true, subtree: true };
@@ -52,6 +52,7 @@ const observeLyrics = (): void => {
       const lyricsLines = getAllLyrics();
       if (lyricsLines && lyricsLines.length > 0) {
         insertTranslatedLyrics();
+        observer.disconnect();
       } else {
         console.warn('Lyrics not found during DOM mutation.');
       }

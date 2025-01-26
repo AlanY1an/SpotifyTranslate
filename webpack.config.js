@@ -52,6 +52,7 @@ var options = {
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
+    offscreen: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.js'),
   },
   chromeExtensionBoilerplate: {
     notHotReload: ['background', 'contentScript', 'devtools', 'offscreen'],
@@ -225,6 +226,12 @@ var options = {
       template: path.join(__dirname, 'src', 'pages', 'Panel', 'index.html'),
       filename: 'panel.html',
       chunks: ['panel'],
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.html'),
+      filename: 'offscreen.html',
+      chunks: ['offscreen'],
       cache: false,
     }),
   ].filter(Boolean),

@@ -1,3 +1,4 @@
+
 export async function ensureOffscreenDocument() {
   const offscreenUrl = chrome.runtime.getURL("offscreen.html");
 

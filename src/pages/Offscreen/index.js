@@ -11,28 +11,32 @@ async function parseLyrics(url) {
 
     const html = await response.text();
 
-    console.log(html)
-
     // Parse HTML in Offscreen
-    // const doc = new DOMParser().parseFromString(html, "text/html")
-    //
-    // // Extract lyrics
-    // const lyricElementSelector = '[data-lyrics-container="true"]';
-    // const lyricContainer = doc.querySelector(lyricElementSelector);
-    //
-    // if (!lyricContainer) {
-    //   console.warn("No lyrics container found.");
-    //   return [];
-    // }
+    const doc = new DOMParser().parseFromString(html, "text/html")
 
-    // const lyricLines = lyricContainer.innerHTML.split("<br>");
-    // return lyricLines
-    //   .map(line => line.replace(/<[^>]*>/g, "").trim())
-    //   .filter(line => line && !line.startsWith("["));
-    return []
+    // Extract lyrics
+    const lyricElementSelector = '[data-lyrics-container="true"]';
+    const lyricContainer = doc.querySelector(lyricElementSelector);
+
+    if (!lyricContainer) {
+      console.warn("No lyrics container found.");
+      return [];
+    }
+
+    const lyricLines = lyricContainer.innerHTML.split(/<br\s*\/?>/gi, '\n')
+      .map(line => line.replace(/<[^>]*>/g, "").trim()) // Remove HTML tags
+      .filter(line => line && !line.startsWith("["));; // Remove lines starting with [
+
+    if (lyricLines.length === 0) {
+      console.warn("No lyrics found.");
+      return []; // If no lyrics found, return empty array
+    }
+
+    return lyricLines
+
   } catch (error) {
     console.error("Error parsing lyrics:", error);
-    return [];
+    throw error;
   }
 }
 
@@ -43,4 +47,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ lyrics });
     });
   }
+  return true;
 });

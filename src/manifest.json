@@ -2,13 +2,22 @@
   "manifest_version": 3,
   "name": "Spotify Lyrics Translator",
   "version": "1.0",
-  "description": "Translate and display Spotify lyrics on the web player.",
-  "options_page": "options.html",
   "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
     "offscreen"
   ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "<all_urls>"
+  ],
+  "description": "Translate and display Spotify lyrics on the web player.",
+  "options_page": "options.html",
   "background": {
-    "service_worker": "background.bundle.js"
+    "service_worker": "background.bundle.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
@@ -42,8 +51,6 @@
         "offscreen.html"
       ],
       "matches": [
-        "http://*/*",
-        "https://*/*",
         "<all_urls>"
       ]
     }

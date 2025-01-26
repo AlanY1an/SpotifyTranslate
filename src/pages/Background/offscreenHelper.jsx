@@ -1,7 +1,7 @@
 // This function is called from the content script and ensures that an offscreen document exists before sending a message to it.
 // It returns true to keep the message channel open.
 
-export function extractTestLyricsFromGenius(message, sendResponse) {
+export function extractLyricsFromURL(message, sendResponse) {
   const offscreenUrl = chrome.runtime.getURL("offscreen.html");
 
   return chrome.offscreen.hasDocument()

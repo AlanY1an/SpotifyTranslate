@@ -48,7 +48,6 @@ const Popup = () => {
     setLyricsLinks([]);
 
     try {
-      // 先移除任何已存在的监听器
       const existingListener = window.messageListener;
       if (existingListener) {
         chrome.runtime.onMessage.removeListener(existingListener);

@@ -3,7 +3,7 @@
   "name": "Spotify Lyrics Translator",
   "version": "1.0",
   "permissions": ["storage", "activeTab", "scripting", "offscreen"],
-  "host_permissions": ["http://*/*", "https://*/*", "<all_urls>"],
+  "host_permissions": ["<all_urls>"],
   "description": "Translate and display Spotify lyrics on the web player.",
   "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": ["<all_urls>"],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }

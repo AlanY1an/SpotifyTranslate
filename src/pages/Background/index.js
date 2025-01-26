@@ -1,4 +1,4 @@
-import { ensureOffscreenDocument } from "./offscreenHelper";
+import { extractTestLyricsFromGenius } from "./offscreenHelper";
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
@@ -29,7 +29,7 @@ async function handleMessage(message, sendResponse) {
   switch (message.type) {
 
     case 'EXTRACT_LYRICS':
-      await ensureOffscreenDocument(message, sendResponse);
+      await extractTestLyricsFromGenius(message, sendResponse);
       break;
 
     case 'FETCH_SONG_INFO':

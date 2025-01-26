@@ -41,7 +41,7 @@ const insertTranslatedLyrics = (): void => {
 };
 
 // Monitor for lyrics loading
-let debounceTimeout: NodeJS.Timeout | null = null;
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 const observeLyrics = (): void => {
   const targetNode = document.body;
   const config = { childList: true, subtree: true };

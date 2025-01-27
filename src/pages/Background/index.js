@@ -1,12 +1,11 @@
-import { extractLyricsFromURL } from "./offscreenHelper";
+import { handleFetchSongInfo } from './api/geniusSongInfoApi';
+import {
+  handleExtractLyricsFromURL,
+  handleFetchAvaLanguageUrl,
+} from './api/offscreenManager';
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
-
-
-const GENIUS_API_URL = 'https://api.genius.com/search';
-const GENIUS_API_TOKEN =
-  'jp7bt2-o1O_KHoAjTQthUDNB4PidEUgxt0NlL-eZ8pMyQV6J6mqN-sXIF9rItBb0';
 
 console.log('Background script is running');
 
@@ -27,42 +26,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // 主消息处理函数
 async function handleMessage(message, sendResponse) {
   switch (message.type) {
-
-    case 'EXTRACT_LYRICS':
-      await extractLyricsFromURL(message, sendResponse);
-      break;
-
-    case 'FETCH_SONG_INFO':
-      await handleFetchSongInfo(message, sendResponse);
+    case 'FETCH_LYRICS_FROM_URL':
+      await handleExtractLyricsFromURL(message, sendResponse);
       break;
 
     case 'FETCH_LYRICS_PAGE':
       await handleFetchLyricsPage(message, sendResponse);
       break;
 
+    case 'FETCH_SONG_INFO':
+      await handleFetchSongInfo(message, sendResponse);
+      break;
+
+    case 'FETCH_AVAILABLE_LANG_URL':
+      console.log('Received FETCH_AVAILABLE_LANG_URL request in background...');
+      await handleFetchAvaLanguageUrl(message, sendResponse);
+      break;
+
     default:
+      console.error('Unknown message type:', message.type);
       sendResponse({ error: 'Unknown message type' });
   }
+
+  // Indicate the response will be async
+  return true;
 }
 
-// 处理获取歌曲信息的请求
-async function handleFetchSongInfo(message, sendResponse) {
-  try {
-    console.log('Fetching song info for:', message);
-    const { trackName, artistName } = message;
-
-    const lyricsUrl = await fetchGeniusLyricsUrl(trackName, artistName);
-    console.log('Found lyrics URL:', lyricsUrl);
-
-    sendResponse({ lyrics: lyricsUrl });
-  } catch (error) {
-    console.error('Error fetching lyrics URL:', error);
-    sendResponse({
-      lyrics: null,
-      error: 'Lyrics URL not found or API error.',
-    });
-  }
-}
+// Get all lanagues
 
 // 处理获取歌词页面的请求
 async function handleFetchLyricsPage(message, sendResponse) {
@@ -80,31 +70,4 @@ async function handleFetchLyricsPage(message, sendResponse) {
     console.error('Error fetching lyrics page:', error);
     sendResponse({ success: false, error: error.message });
   }
-}
-
-// 从 Genius API 获取歌词 URL
-async function fetchGeniusLyricsUrl(trackName, artistName) {
-  const query = `${trackName} ${artistName}`;
-  const response = await fetch(
-    `${GENIUS_API_URL}?q=${encodeURIComponent(query)}`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${GENIUS_API_TOKEN}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`API error: ${response.status} - ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  console.log('Response from Genius API:', data);
-
-  if (data.response.hits.length > 0) {
-    return data.response.hits[0].result.url;
-  }
-
-  throw new Error('No lyrics URL found.');
 }

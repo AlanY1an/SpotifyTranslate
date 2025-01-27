@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Popup.css';
 
 const Popup = () => {
@@ -83,7 +83,7 @@ const Popup = () => {
       console.log('Sending message to offscreen document...');
       chrome.runtime.sendMessage({
         target: 'offscreen',
-        type: 'FETCH_LYRICS',
+        type: 'FETCH_AVAILABLE_LANG_URL',
         url: songInfoUrl,
       });
 

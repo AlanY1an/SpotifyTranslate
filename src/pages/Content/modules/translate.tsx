@@ -1,9 +1,4 @@
-import { mockTranslatedLyrics } from '../../Background/api/lyricsTranslatedApi';
-
-// Get Song Name and Author/Team Name
-const getSongInfo = (): string[] => {
-  return [mockTranslatedLyrics.meta.title, mockTranslatedLyrics.meta.artist];
-};
+import { translatedSongObject } from '../dataStore';
 
 // Get All Lyrics
 const getAllLyricsLines = (): HTMLDivElement[] | null => {
@@ -29,7 +24,7 @@ const insertTranslatedLyrics = (): void => {
     // Create translated lyrics element
     const translatedElement = document.createElement('div');
     translatedElement.textContent =
-      mockTranslatedLyrics.lyrics[translationIndex] ||
+      translatedSongObject.lyrics[translationIndex] ||
       '[Translation not available]';
     translatedElement.className = 'translated-line';
 
@@ -49,7 +44,7 @@ const observeLyrics = (): void => {
   const observer = new MutationObserver(() => {
     if (debounceTimeout) clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-      const lyricsLines = getAllLyrics();
+      const lyricsLines = getAllLyricsLines();
       if (lyricsLines && lyricsLines.length > 0) {
         insertTranslatedLyrics();
         observer.disconnect();

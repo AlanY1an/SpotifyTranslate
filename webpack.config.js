@@ -42,13 +42,6 @@ var options = {
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
-    offscreen: path.join(
-      __dirname,
-      'src',
-      'pages',
-      'Offscreen',
-      'offscreen.js'
-    ),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
@@ -226,12 +219,6 @@ var options = {
       template: path.join(__dirname, 'src', 'pages', 'Panel', 'index.html'),
       filename: 'panel.html',
       chunks: ['panel'],
-      cache: false,
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Offscreen', 'index.html'),
-      filename: 'offscreen.html',
-      chunks: ['offscreen'],
       cache: false,
     }),
   ].filter(Boolean),

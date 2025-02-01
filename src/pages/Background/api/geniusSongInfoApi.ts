@@ -1,14 +1,18 @@
 const GENIUS_API_URL = 'https://api.genius.com/search';
 const GENIUS_API_TOKEN =
-  'jp7bt2-o1O_KHoAjTQthUDNB4PidEUgxt0NlL-eZ8pMyQV6J6mqN-sXIF9rItBb0';
+  '4Zx4U-V5nqPBNeyjPTy_27purcbrCx-SHFu6_tzF8mUnx2bPXDDYEsy3HjHqLvuY';
 
 // 处理获取歌曲信息的请求
 export async function handleFetchSongInfo(message: any, sendResponse: any) {
   try {
     console.log('Fetching song info for:', message);
-    const { trackName, artistName } = message;
+    const { trackName, artistName, targetLanguage } = message;
 
-    const lyricsUrl = await fetchGeniusLyricsUrl(trackName, artistName);
+    const lyricsUrl = await fetchGeniusLyricsUrl(
+      trackName,
+      artistName,
+      targetLanguage
+    );
     console.log('Found lyrics URL:', lyricsUrl);
 
     sendResponse({ lyrics: lyricsUrl });
@@ -21,10 +25,13 @@ export async function handleFetchSongInfo(message: any, sendResponse: any) {
   }
 }
 
-
 // 从 Genius API 获取歌词 URL
-async function fetchGeniusLyricsUrl(trackName:any, artistName:any) {
-  const query = `${trackName} ${artistName}`;
+async function fetchGeniusLyricsUrl(
+  trackName: any,
+  artistName: any,
+  targetLanguage: any
+) {
+  const query = `${trackName} ${artistName} ${targetLanguage}`;
   const response = await fetch(
     `${GENIUS_API_URL}?q=${encodeURIComponent(query)}`,
     {

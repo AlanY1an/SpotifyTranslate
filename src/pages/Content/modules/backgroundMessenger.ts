@@ -1,6 +1,7 @@
 export async function fetchSongInfoFromGenius(
   songTitle: string,
-  artistName: string
+  artistName: string,
+  targetLanguage: string
 ): Promise<string | null> {
   console.log('Fetching song info from Genius via background...');
   return new Promise((resolve, reject) => {
@@ -9,6 +10,7 @@ export async function fetchSongInfoFromGenius(
         type: 'FETCH_SONG_INFO',
         trackName: songTitle,
         artistName: artistName,
+        targetLanguage: targetLanguage,
       },
       (response) => {
         if (chrome.runtime.lastError) {
@@ -92,4 +94,3 @@ export async function fetchLyricsFromUrl(
     );
   });
 }
-

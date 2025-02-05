@@ -1,3 +1,46 @@
+# 🎵 Spotify Bilingual Lyrics Extension  
+
+A Chrome extension that provides **bilingual lyrics** for Spotify, offering more accurate, human-translated lyrics instead of rigid machine translations. This extension enhances the listening experience for music lovers and language learners by displaying real-time, side-by-side lyrics.  
+
+## ✨ Features  
+- 🎶 **Real-time bilingual lyrics** displayed alongside the Spotify web player.  
+- 🌍 **Human-translated lyrics** sourced from lyric websites(Genius) for better accuracy.  
+
+## 🛠️ Installation  
+### 1️⃣ Clone the Repository  
+```sh  
+git clone https://github.com/AlanY1an/SpotifyTranslate
+cd Spotify-Bilingual-Lyrics  
+```  
+
+### 2️⃣ Load the Extension in Chrome  
+1. Open **Chrome** and go to `chrome://extensions/`.  
+2. Enable **Developer mode** (toggle in the top right).  
+3. Click **Load unpacked** and select the extension folder.  
+
+### 3️⃣ Pin the Extension  
+Click the **Extensions icon** (puzzle piece 🧩) in Chrome and pin **Spotify Bilingual Lyrics** for easy access.  
+
+## 🎯 How to Use  
+1. Open **Spotify Web Player** in Chrome.  
+2. Play a song, and the extension will automatically fetch and display bilingual lyrics.  
+3. Enjoy real-time synchronized lyrics with **line-by-line translations**!  
+
+## 🛠️ Tech Stack  
+- **JavaScript/TypeScript** – Core logic for fetching and displaying lyrics.
+- **React** - Build up the UI
+- **Chrome Extension APIs** – For interacting with Spotify Web Player.  
+- **Web Scraping & DOM Manipulation** – To retrieve and render lyrics.  
+
+## 🚀 Future Enhancements  
+- 🔍 **Support for more languages** beyond English-Spanish.  
+- 🎼 **User customization** (font size, color themes, etc.).  
+- 📌 **Lyrics improvements** for better accuracy.  
+
+## 📢 Contributing  
+Feel free to contribute! Open a pull request or suggest enhancements via issues.
+
+
 <img src="src/assets/img/icon-128.png" width="64"/> 
 
 # Chrome Extension (MV3) Boilerplate with React 18 and Webpack 5

@@ -1,14 +1,72 @@
+import React, { useEffect, useState } from 'react';
+import {
+  getStoredOptions,
+  resetStoredOptions,
+  defaultOptions,
+  allOptions,
+} from '../Services/options';
 import './Popup.css';
-import React from 'react';
 
+import { handleFormChange, handleReset } from './handler';
 
-export const notifyUser = () => {
-  alert('This is not a Spotify page!');
-};
+export default function Popup() {
+  const [options, setOptions] = useState(defaultOptions);
 
+  // ✅ 1. 初始化时从 `chrome.storage.sync` 获取数据
+  useEffect(() => {
+    async function fetchOptions() {
+      const storedOptions = await getStoredOptions();
+      setOptions(storedOptions);
+    }
+    fetchOptions();
+  }, []);
 
-const Popup = () => {
-  return <div>Popup</div>;
-};
+  // ✅ 2. 监听 `chrome.storage.sync` 变化，自动更新 UI
+  useEffect(() => {
+    function handleStorageChange(changes) {
+      if (changes.options) {
+        if (changes.options) {
+          setOptions(changes.options.newValue);
+        }
+      }
+    }
+    chrome.storage.onChanged.addListener(handleStorageChange);
+    return () => chrome.storage.onChanged.removeListener(handleStorageChange);
+  }, []);
 
-export default Popup;
+  return (
+    <>
+      <h1 className="app-title">Spotify Enhancer</h1>
+      <form onChange={handleFormChange}>
+        <label className="block">
+          <input
+            type="checkbox"
+            name="enableTranslation"
+            checked={options.enableTranslation}
+            className="mr-2"
+          />
+          <span>Enable Translation</span>
+        </label>
+
+        {options.enableTranslation && (
+          <label>
+            <span>Select Language:</span>
+            <select name="selectedLanguage" value={options.selectedLanguage}>
+              {Object.entries(allOptions.selectedLanguage.options).map(
+                ([key, label]) => (
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
+                )
+              )}
+            </select>
+          </label>
+        )}
+
+        <button id="reset" type="button" onClick={handleReset}>
+          Reset to defaults
+        </button>
+      </form>
+    </>
+  );
+}

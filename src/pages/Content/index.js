@@ -26,7 +26,9 @@ let trackInfo = [];
 
   const [songTitle, artist] = trackInfo;
   console.log(`Now playing: ${songTitle} by ${artist}`);
-
+  const songInfo = { songTitle, artist };
+  localStorage.setItem('currentSongInfo', JSON.stringify(songInfo));
+  
   try {
     // Step 2: Get URL of lyrics from Genius
     const songInfoUrl = await fetchSongInfoFromGenius(

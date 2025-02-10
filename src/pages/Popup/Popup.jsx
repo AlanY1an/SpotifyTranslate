@@ -38,15 +38,23 @@ export default function Popup() {
     <>
       <h1 className="app-title">Spotify Enhancer</h1>
       <form onChange={handleFormChange}>
-        <label className="block">
-          <input
-            type="checkbox"
-            name="enableTranslation"
-            checked={options.enableTranslation}
-            className="mr-2"
-          />
-          <span>Enable Translation</span>
-        </label>
+        <div className="translation-container">
+          <div className="love">
+            <input
+              id="switch"
+              type="checkbox"
+              name="enableTranslation"
+              checked={options.enableTranslation}
+            />
+            <label className="love-heart" for="switch">
+              <i className="left"></i>
+              <i className="right"></i>
+              <i className="bottom"></i>
+              <div className="round"></div>
+            </label>
+          </div>
+          <span className="translation-title">Enable Translation</span>
+        </div>
 
         {options.enableTranslation && (
           <label>

@@ -45,38 +45,6 @@ let trackInfo = [];
     // Step 3: Translate Lyrics to Target Language
     extractedLyrics = await fetchLyricsFromUrl(songInfoUrl);
 
-    // Step 4: Get all other available languages
-    try {
-      const availableLanguagesUrl = await fetchAvailableLanguagesUrl(
-        songInfoUrl
-      );
-      console.log('Available languages:', availableLanguagesUrl);
-
-      // try {
-      //   allLanguages = availableLanguagesUrl.find(
-      //     (languageObj) => languageObj.language === targetLanguage
-      //   );
-      //   try {
-      //     if (allLanguages) {
-      //       const lyricsUrl = allLanguages.href;
-      //       extractedLyrics = await fetchLyricsFromUrl(lyricsUrl);
-      //       console.log('Lyrics:', extractedLyrics);
-      //     } else {
-      //       console.log(
-      //         `No lyrics available for the target language: ${targetLanguage}`
-      //       );
-      //     }
-      //   } catch (error) {
-      //     console.error(
-      //       `No lyrics available for the target language: ${targetLanguage}`
-      //     );
-      //   }
-      // } catch (error) {
-      //   console.error('Failed to fetch lyrics:', error);
-      // }
-    } catch (error) {
-      console.error('Failed to fetch available languages:', error);
-    }
   } catch (error) {
     console.error('Failed to fetch or process song info:', error);
   }

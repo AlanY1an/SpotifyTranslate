@@ -1,6 +1,6 @@
 const GENIUS_API_URL = 'https://api.genius.com/search';
 const GENIUS_API_TOKEN =
-  'V0FH0HljAH5Gopac9CCi8S-AnrlkOkt21JGpFcjtriLq7C1qR7m4rpvlZr72cP8f';
+  'o_c6SgajtvBGl4t_T4qr7WAMQFNyzxNSMZ14D3VmXMq1n1eCL6vAoWttCAQNJVc0';
 
 // 处理获取歌曲信息的请求
 export async function handleFetchSongInfo(message: any, sendResponse: any) {

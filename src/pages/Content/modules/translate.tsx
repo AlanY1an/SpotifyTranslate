@@ -1,4 +1,5 @@
 import { translatedSongObject } from '../dataStore';
+import { SpotifyPlayerApi, SpotifyTrack } from '../../../pages/Background/api/spotifyPlayerApi';
 
 // Get All Lyrics
 const getAllLyricsLines = (): HTMLDivElement[] | null => {
@@ -57,7 +58,39 @@ const observeLyrics = (): void => {
   console.log('Started observing lyrics.');
 };
 
-export const showLyricsTranslated = (): void => {
-  console.log('Initializing lyrics translation...');
+const getTranslationsForTrack = async (track: SpotifyTrack): Promise<string[]> => {
+  // 临时实现，返回空数组
+  return [];
+};
+
+const updateLyricsTranslation = async (track: SpotifyTrack) => {
+  // 清除现有的翻译
+  const existingTranslations = document.querySelectorAll('.translated-line');
+  existingTranslations.forEach(el => el.remove());
+
+  // 获取新的翻译
+  try {
+    const translations = await getTranslationsForTrack(track);
+    translatedSongObject.lyrics = translations;
+
+    // 重新插入翻译
+    insertTranslatedLyrics();
+  } catch (error) {
+    console.error('获取歌词翻译失败:', error);
+  }
+};
+
+export const initializeLyricsTranslation = (spotifyApi: SpotifyPlayerApi): void => {
+  console.log('初始化歌词翻译...');
+
+  // 监听播放状态变化
+  const cleanup = spotifyApi.watchPlaybackState((track) => {
+    if (track) {
+      console.log('歌曲变更:', track.name);
+      updateLyricsTranslation(track);
+    }
+  });
+
+  // 开始观察DOM变化
   observeLyrics();
 };

@@ -32,7 +32,6 @@ const insertTranslatedLyrics = (): void => {
 
     translationIndex++;
   });
-  console.log('Mock translations inserted successfully.');
 };
 
 // Monitor for lyrics loading

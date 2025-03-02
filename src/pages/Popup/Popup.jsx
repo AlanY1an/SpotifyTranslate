@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   getStoredOptions,
-  resetStoredOptions,
   defaultOptions,
   allOptions,
 } from '../Services/options';
@@ -25,9 +24,7 @@ export default function Popup() {
   useEffect(() => {
     function handleStorageChange(changes) {
       if (changes.options) {
-        if (changes.options) {
-          setOptions(changes.options.newValue);
-        }
+        setOptions(changes.options.newValue);
       }
     }
     chrome.storage.onChanged.addListener(handleStorageChange);

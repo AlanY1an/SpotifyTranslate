@@ -42,6 +42,8 @@ export const defaultOptions: Record<OptionKeys, any> = Object.keys(
   return acc;
 }, {} as Record<OptionKeys, any>);
 
+
+
 // ✅ 创建 `ChromeStorage` 实例
 const syncStorage = new ChromeStorage('sync');
 
